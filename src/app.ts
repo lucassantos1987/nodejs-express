@@ -1,11 +1,27 @@
 import express from 'express'
-const app = express()
-const port = 3000
+import { Client } from 'pg'
 
-app.get('/', (req, res) => {
-  res.send('Hello CodeLab!!!')
-})
+async function main() {
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+    const app = express()
+    const port = 3000
+
+    const client = new Client()
+    await client.connect()
+
+    const res = await client.query('SELECT $1::text as massage', ['DB Connection is OK'])
+    console.log(res.rows[0])
+    await client.end()
+
+
+    app.get('/', (req, res) => {
+        res.send('Hello CodeLab!!!')
+    })
+
+
+    app.listen(port, () => {
+        console.log(`Example app listening on port ${port}`)
+    })
+}
+
+main()
