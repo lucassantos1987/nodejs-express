@@ -1,10 +1,13 @@
 import express from 'express'
 import { Client } from 'pg'
+import { router } from './router'
 
 async function main() {
 
     const app = express()
     const port = 3000
+    app.use(express.json());
+    app.use(express.urlencoded());
 
     const client = new Client()
     await client.connect()
@@ -18,6 +21,7 @@ async function main() {
         res.send('Hello CodeLab!!!')
     })
 
+    app.use('/api/v1', router)
 
     app.listen(port, () => {
         console.log(`Example app listening on port ${port}`)
